@@ -1,3 +1,4 @@
+import { getImageUrl as resolveImageUrl } from "../../utils/imageUrl";
 // ProductDetailPage.jsx
 // Combined detail page for both uPVC and Aluminum products.
 // Determines which type to load based on the route:
@@ -22,17 +23,12 @@ import { getCanonicalProductPath } from "../../utils/productRouting";
 
 // ─── API config ───────────────────────────────────────────────────────────────
 
-const IMAGE_BASE_URL = import.meta.env.VITE_API_BASE_URL.replace("/api", "");
 const UPVC_API_URL = `${import.meta.env.VITE_API_BASE_URL}/upvcmachines`;
 const ALUMINUM_API_URL = `${import.meta.env.VITE_API_BASE_URL}/aluminum-machines`;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-const getFullUrl = (path) => {
-  if (!path) return "";
-  if (path.startsWith("http")) return path;
-  return `${IMAGE_BASE_URL}${path}`;
-};
+const getFullUrl = (path) => resolveImageUrl(path);
 
 const showToast = (message, color = "bg-gray-800") => {
   const toast = document.createElement("div");

@@ -1,3 +1,4 @@
+import { getImageUrl as resolveImageUrl } from "../../utils/imageUrl";
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -265,7 +266,7 @@ const ProductCard = ({ product, onEnquire }) => {
             {images.map((image, index) => (
               <img
                 key={index}
-                src={image}
+                src={resolveImageUrl(image)}
                 alt={`${product.title} ${index + 1}`}
                 className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
                   index === currentImageIndex ? "opacity-100" : "opacity-0"

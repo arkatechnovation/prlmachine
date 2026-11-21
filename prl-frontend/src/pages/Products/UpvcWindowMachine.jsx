@@ -1,3 +1,4 @@
+import { getImageUrl as resolveImageUrl } from "../../utils/imageUrl";
 // UPVCWindowMachinesPage.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -16,8 +17,6 @@ import { UPVC_CATEGORIES } from "../../utils/upvcCategories";
 import { getCanonicalProductPath } from "../../utils/productRouting";
 
 const UPVC_API_URL = `${import.meta.env.VITE_API_BASE_URL}/upvcmachines`;
-// 🔹 Backend URL without /api to access the uploads folder
-const IMAGE_BASE_URL = import.meta.env.VITE_API_BASE_URL.replace("/api", "");
 
 const UPVCWindowMachinesPage = () => {
   const navigate = useNavigate();
@@ -29,12 +28,9 @@ const UPVCWindowMachinesPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 🔹 Helper function to handle local server paths vs legacy URLs
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return "/placeholder-image.jpg";
-    if (imagePath.startsWith("http")) return imagePath;
-    return `${IMAGE_BASE_URL}${imagePath}`;
-  };
+  const getImageUrl = (imagePath) =>
+
+    resolveImageUrl(imagePath, { fallback: "/placeholder-image.jpg" });
 
   // Fetch data on mount
   useEffect(() => {

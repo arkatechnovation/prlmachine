@@ -1,3 +1,4 @@
+import { getImageUrl as resolveImageUrl } from "../../utils/imageUrl";
 // MachinePage.jsx
 // Combined component for both uPVC and Aluminum window machine category pages.
 // Detects which type to show based on the :categorySlug param matching
@@ -19,17 +20,14 @@ import { UPVC_CATEGORIES } from "../../utils/upvcCategories";
 import { ALUMINUM_CATEGORIES } from "../../utils/aluminumCategories";
 import { getCanonicalProductPath } from "../../utils/productRouting";
 
-const IMAGE_BASE_URL = import.meta.env.VITE_API_BASE_URL.replace("/api", "");
 const UPVC_API_URL = `${import.meta.env.VITE_API_BASE_URL}/upvcmachines`;
 const ALUMINUM_API_URL = `${import.meta.env.VITE_API_BASE_URL}/aluminum-machines`;
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
-const getImageUrl = (imagePath) => {
-  if (!imagePath) return "/placeholder-image.jpg";
-  if (imagePath.startsWith("http")) return imagePath;
-  return `${IMAGE_BASE_URL}${imagePath}`;
-};
+const getImageUrl = (imagePath) =>
+
+  resolveImageUrl(imagePath, { fallback: "/placeholder-image.jpg" });
 
 const getUpvcCategoryFromName = (name = "") => {
   const n = name.toLowerCase();

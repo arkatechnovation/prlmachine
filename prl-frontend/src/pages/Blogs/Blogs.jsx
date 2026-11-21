@@ -1,3 +1,4 @@
+import { getImageUrl as resolveImageUrl } from "../../utils/imageUrl";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
@@ -10,13 +11,6 @@ const Blogs = () => {
   const [error, setError] = useState(null);
 
   const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/blogs`;
-
-  // 🔹 IMAGE BASE URL Fix: Backend domain handle karne ke liye
-  const getBaseUrl = () => {
-    const apiURL = import.meta.env.VITE_API_BASE_URL;
-    return apiURL.endsWith("/api") ? apiURL.replace("/api", "") : apiURL;
-  };
-  const IMAGE_BASE_URL = `${getBaseUrl()}/uploads`;
 
   const fetchBlogs = async () => {
     setIsLoading(true);
@@ -89,14 +83,8 @@ const Blogs = () => {
   };
 
   // ✅ Image Handler
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return "https://via.placeholder.com/400x300?text=No+Image";
-    if (imagePath.startsWith("http")) return imagePath;
-    const cleanPath = imagePath.startsWith("/")
-      ? imagePath.substring(1)
-      : imagePath;
-    return `${IMAGE_BASE_URL}/${cleanPath}`;
-  };
+  const getImageUrl = (imagePath) =>
+    resolveImageUrl(imagePath, { fallback: "https://via.placeholder.com/400x300?text=No+Image" });
 
   const formatDate = (dateString) => {
     if (!dateString) return "No date";

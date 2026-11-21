@@ -1,3 +1,4 @@
+import { getImageUrl as resolveImageUrl } from "../../utils/imageUrl";
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -58,19 +59,9 @@ const AdminBlog = () => {
 
   const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/blogs`;
 
-  // 🔹 IMAGE BASE URL for preview
-  const getBaseUrl = () => {
-    const apiURL = import.meta.env.VITE_API_BASE_URL;
-    return apiURL.endsWith("/api") ? apiURL.replace("/api", "") : apiURL;
-  };
-  const IMAGE_BASE_URL = `${getBaseUrl()}/uploads`;
+  const getImageUrl = (imagePath) =>
 
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return "https://via.placeholder.com/300x150?text=No+Image";
-    if (imagePath.startsWith("http") || imagePath.startsWith("blob"))
-      return imagePath;
-    return `${IMAGE_BASE_URL}/${imagePath}`;
-  };
+    resolveImageUrl(imagePath, { fallback: "https://via.placeholder.com/300x150?text=No+Image" });
 
   const formatDateForInput = (dateString) => {
     if (!dateString) return "";

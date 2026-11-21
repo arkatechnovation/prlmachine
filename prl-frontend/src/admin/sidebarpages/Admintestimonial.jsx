@@ -1,3 +1,4 @@
+import { getImageUrl as resolveImageUrl } from "../../utils/imageUrl";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import RecaptchaField from "../../components/RecaptchaField";
@@ -32,25 +33,12 @@ export default function TestimonialManager() {
   // 🔹 API URLs Setup (Production Optimized)
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-  /**
-   * FIX: IMAGE_BASE_URL logic
-   * Agar BASE_URL "https://domain.com/api" hai, toh ye use "https://domain.com/uploads" banayega.
-   * Agar aap localhost par hain, toh ye "http://localhost:3000/uploads" banayega.
-   */
-  const SERVER_ROOT = BASE_URL.split("/api")[0];
-  const IMAGE_BASE_URL = `${SERVER_ROOT}/uploads`;
-
   const TESTIMONIAL_API = `${BASE_URL}/testimonials`;
   const STATS_API = `${BASE_URL}/testimonials/data/stats`;
 
   // 🔹 Helper function: Full image URL handle karne ke liye
-  const getFullImgPath = (imgName) => {
-    if (!imgName) return "https://via.placeholder.com/60";
-    // Agar full URL hai (e.g. cloud storage), toh direct return karein
-    if (imgName.startsWith("http")) return imgName;
-    // Server static folder se image fetch karein
-    return `${IMAGE_BASE_URL}/${imgName}`;
-  };
+  const getFullImgPath = (imgName) =>
+    resolveImageUrl(imgName, { fallback: "https://via.placeholder.com/60" });
 
   // 🔹 Fetch Data on Load
   useEffect(() => {

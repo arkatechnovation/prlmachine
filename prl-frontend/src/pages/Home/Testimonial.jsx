@@ -1,3 +1,4 @@
+import { getImageUrl as resolveImageUrl } from "../../utils/imageUrl";
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
@@ -20,8 +21,6 @@ const TestimonialSlider = () => {
 
   // 🔹 API & Image Path Setup
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  const SERVER_ROOT = BASE_URL.split("/api")[0];
-  const IMAGE_BASE_URL = `${SERVER_ROOT}/uploads`;
 
   // 🔹 Helper: Extract URL from iframe tag or convert watch link to embed
   const getEmbedUrl = (input) => {
@@ -51,11 +50,8 @@ const TestimonialSlider = () => {
   };
 
   // 🔹 Helper: Image path handle karne ke liye
-  const getFullImgPath = (imgName) => {
-    if (!imgName) return "https://via.placeholder.com/60";
-    if (imgName.startsWith("http")) return imgName;
-    return `${IMAGE_BASE_URL}/${imgName}`;
-  };
+  const getFullImgPath = (imgName) =>
+    resolveImageUrl(imgName, { fallback: "https://via.placeholder.com/60" });
 
   // 🔹 Fetch Data
   useEffect(() => {

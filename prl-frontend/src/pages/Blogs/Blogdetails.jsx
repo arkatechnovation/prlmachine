@@ -1,3 +1,4 @@
+import { getImageUrl as resolveImageUrl } from "../../utils/imageUrl";
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -12,20 +13,9 @@ const BlogDetails = () => {
 
   const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/blogs`;
 
-  const getBaseUrl = () => {
-    const apiURL = import.meta.env.VITE_API_BASE_URL;
-    return apiURL.endsWith("/api") ? apiURL.replace("/api", "") : apiURL;
-  };
-  const IMAGE_BASE_URL = `${getBaseUrl()}/uploads`;
+  const getImageUrl = (imagePath) =>
 
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return "https://via.placeholder.com/800x400?text=No+Image";
-    if (imagePath.startsWith("http")) return imagePath;
-    const cleanPath = imagePath.startsWith("/")
-      ? imagePath.substring(1)
-      : imagePath;
-    return `${IMAGE_BASE_URL}/${cleanPath}`;
-  };
+    resolveImageUrl(imagePath, { fallback: "https://via.placeholder.com/800x400?text=No+Image" });
 
   const fetchBlogDetails = async () => {
     setIsLoading(true);

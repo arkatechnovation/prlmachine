@@ -1,3 +1,4 @@
+import { getImageUrl as resolveImageUrl } from "../../../utils/imageUrl";
 import React, { useState, useEffect, memo } from "react";
 import axios from "axios";
 import {
@@ -44,11 +45,7 @@ const MachineForm = memo(
     const [showHtmlPreview, setShowHtmlPreview] = useState(false);
 
     // Helper to get full server URL
-    const getFullUrl = (path) => {
-      if (!path) return "";
-      if (path.startsWith("http")) return path;
-      return `${import.meta.env.VITE_API_BASE_URL.replace("/api", "")}${path}`;
-    };
+    const getFullUrl = (path) => resolveImageUrl(path);
 
     return (
       <div className="bg-white rounded-xl max-h-[85vh] overflow-y-auto shadow-md p-6 w-full max-w-4xl">
@@ -426,9 +423,7 @@ MachineForm.displayName = "MachineForm";
 // ============================================================================
 const PreviewModal = ({ item, onClose }) => {
   if (!item.visible) return null;
-  const fullUrl = item.url.startsWith("http")
-    ? item.url
-    : `${import.meta.env.VITE_API_BASE_URL.replace("/api", "")}${item.url}`;
+  const fullUrl = resolveImageUrl(item.url);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[600] p-4 backdrop-blur-sm">
@@ -764,11 +759,7 @@ const AdminAluminumWindowMachine = () => {
                     {machine.images?.slice(0, 3).map((img, i) => (
                       <img
                         key={i}
-                        src={
-                          img.startsWith("http")
-                            ? img
-                            : `${import.meta.env.VITE_API_BASE_URL.replace("/api", "")}${img}`
-                        }
+                        src={resolveImageUrl(img)}
                         className="w-8 h-8 rounded-full border-2 border-white object-cover bg-gray-100"
                       />
                     ))}

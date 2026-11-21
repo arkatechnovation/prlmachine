@@ -1,3 +1,4 @@
+import { getImageUrl as resolveImageUrl } from "../../utils/imageUrl";
 // AluminiumDetail.jsx
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
@@ -17,8 +18,6 @@ import ValuedClients from "../Home/Our-Clients";
 import { getCanonicalProductPath } from "../../utils/productRouting";
 
 const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/aluminum-machines`;
-// 🔹 Backend URL without /api to access the uploads folder
-const IMAGE_BASE_URL = import.meta.env.VITE_API_BASE_URL.replace("/api", "");
 
 const AluminiumDetail = ({ productIdentifier = null }) => {
   const { id } = useParams();
@@ -36,11 +35,7 @@ const AluminiumDetail = ({ productIdentifier = null }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   // 🔹 Helper function to handle local server paths
-  const getFullUrl = (path) => {
-    if (!path) return "";
-    if (path.startsWith("http")) return path;
-    return `${IMAGE_BASE_URL}${path}`;
-  };
+  const getFullUrl = (path) => resolveImageUrl(path);
 
   useEffect(() => {
     const fetchAluminumData = async () => {

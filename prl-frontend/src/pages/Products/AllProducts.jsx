@@ -1,3 +1,4 @@
+import { getImageUrl as resolveImageUrl } from "../../utils/imageUrl";
 import { ArrowRight, Play } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -308,7 +309,7 @@ const MachineCategoryPage = () => {
 
                     <div className="overflow-hidden h-48 relative">
                       <img
-                        src={product.images?.[0] || "/placeholder.jpg"}
+                        src={resolveImageUrl(product.images?.[0], { fallback: "/placeholder.jpg" })}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
@@ -502,7 +503,7 @@ const MachineCategoryPage = () => {
 
                     <div className="overflow-hidden h-48 relative">
                       <img
-                        src={product.images?.[0] || "/placeholder.jpg"}
+                        src={resolveImageUrl(product.images?.[0], { fallback: "/placeholder.jpg" })}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
