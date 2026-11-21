@@ -7,13 +7,7 @@ export function getImageUrl(value, {
   fallback = "",
 } = {}) {
   if (typeof value !== "string" || !value.trim()) return fallback;
-  // Older builds removed "/api" from the hostname and produced
-  // https:/.prlmachine.com/api/uploads/… . Repair only that known legacy
-  // upload format; do not reinterpret arbitrary external or signed URLs.
-  const path = value.trim().replace(
-    /^https?:\/{1,2}\.prlmachine\.com\/(?:api\/)?uploads\//i,
-    "/uploads/",
-  );
+  const path = value.trim();
 
   // Preserve external hosts, signed URLs, and local upload previews verbatim.
   if (/^(https?:|blob:|data:|\/\/)/i.test(path)) return path;
