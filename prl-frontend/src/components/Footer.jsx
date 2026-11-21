@@ -359,7 +359,7 @@ const Footer = () => {
           <div className="flex items-center gap-1">
             <span>Designed & Developed by</span>
             <Link to="https://www.arkatechnovation.com/" className="text-[#FC252E] font-medium hover:underline">
-              Arka Technovation Pvt Ltd
+              Arka Technovation Pvt Ltd 
             </Link>
           </div>
         </div>
