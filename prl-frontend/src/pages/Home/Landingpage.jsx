@@ -1,3 +1,5 @@
+import logoVideo from "../../assets/videos/prllogovideo.mp4";
+import redLionVideo from "../../assets/videos/parida-red-lion-video.mp4";
 import React, { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -5,8 +7,8 @@ const HERO_POSTER = "/assets/vedios/prllogovideo-poster.webp";
 
 // --- Desktop Data ---
 const SLIDE_DATA_DESKTOP = [
-  { id: 1, type: "video", src: "/assets/vedios/prllogovideo.mp4", poster: HERO_POSTER },
-  { id: 2, type: "video", src: "/assets/vedios/parida-red-lion-video.mp4", poster: "/assets/banners/prlhomepagebanner.jpg" },
+  { id: 1, type: "video", src: logoVideo, poster: HERO_POSTER },
+  { id: 2, type: "video", src: redLionVideo, poster: "/assets/banners/prlhomepagebanner.jpg" },
   { id: 3, type: "image", src: "/assets/banners/prlhomepagebanner.jpg" },
   { id: 4, type: "image", src: "/assets/banners/slider/homepagebanner2.jpg" },
   { id: 5, type: "image", src: "/assets/banners/PARIDA2.jpg" },
@@ -14,8 +16,8 @@ const SLIDE_DATA_DESKTOP = [
 
 // --- Mobile Data ---
 const SLIDE_DATA_MOBILE = [
-  { id: 1, type: "video", src: "/assets/vedios/prllogovideo.mp4", poster: HERO_POSTER },
-  { id: 2, type: "video", src: "/assets/vedios/parida-red-lion-video.mp4", poster: "/assets/banners/mobile-view-banners/mobile-view-bannerprl.jpg" },
+  { id: 1, type: "video", src: logoVideo, poster: HERO_POSTER },
+  { id: 2, type: "video", src: redLionVideo, poster: "/assets/banners/mobile-view-banners/mobile-view-bannerprl.jpg" },
   {
     id: 3,
     type: "image",

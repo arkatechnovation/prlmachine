@@ -1,3 +1,5 @@
+import logoVideo from "../../assets/videos/prllogovideo.mp4";
+import redLionVideo from "../../assets/videos/parida-red-lion-video.mp4";
 import React, { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -11,11 +13,11 @@ const VideoHeroWithSlider = () => {
   const slides = [
     {
       type: "video",
-      videoUrl: "/assets/vedios/prllogovideo.mp4",
+      videoUrl: logoVideo,
     },
     {
       type: "video",
-      videoUrl: "/assets/vedios/parida-red-lion-video.mp4",
+      videoUrl: redLionVideo,
       title: "PARIDA RED LION INDIA PVT LTD (PRL)",
       subtitle:
         "A leading manufacturer of uPVC & Aluminium window making machines delivering innovation and quality since 2017.",
