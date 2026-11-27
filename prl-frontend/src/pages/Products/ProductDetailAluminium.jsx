@@ -196,7 +196,7 @@ const AluminiumDetail = ({ productIdentifier = null }) => {
     <div className="max-w-7xl mt-12 mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
       <nav className="flex mb-8" aria-label="Breadcrumb">
-        <ol className="flex items-center space-x-2 text-sm text-gray-500">
+        <ol className="flex w-full min-w-0 items-center gap-x-1 text-sm text-gray-500 sm:gap-x-2">
           <li>
             <button
               onClick={() => navigate(-1)}
@@ -206,7 +206,7 @@ const AluminiumDetail = ({ productIdentifier = null }) => {
             </button>
           </li>
           <li className="flex items-center">
-            <span className="mx-2">/</span>
+            <span className="mx-1 shrink-0 sm:mx-2">/</span>
             <button
               onClick={() => navigate("/products")}
               className="hover:text-purple-700 transition-colors"
@@ -215,7 +215,7 @@ const AluminiumDetail = ({ productIdentifier = null }) => {
             </button>
           </li>
           <li className="flex items-center">
-            <span className="mx-2">/</span>
+            <span className="mx-1 shrink-0 sm:mx-2">/</span>
             <button
               onClick={() => navigate("/products/aluminum-window-machines")}
               className="hover:text-purple-700 transition-colors"
@@ -223,9 +223,9 @@ const AluminiumDetail = ({ productIdentifier = null }) => {
               Aluminum
             </button>
           </li>
-          <li className="flex items-center">
-            <span className="mx-2">/</span>
-            <span className="text-gray-900 font-medium truncate max-w-xs">
+          <li className="flex min-w-0 items-center">
+            <span className="mx-1 shrink-0 sm:mx-2">/</span>
+            <span className="min-w-0 truncate font-medium text-gray-900 sm:max-w-xs">
               {product.name}
             </span>
           </li>
@@ -235,8 +235,8 @@ const AluminiumDetail = ({ productIdentifier = null }) => {
       {/* Product Header */}
       <div className="mb-8 animate-fade-in">
         <div className="flex justify-between items-start flex-wrap gap-4">
-          <div className="flex-1 min-w-[300px]">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+          <div className="min-w-0 basis-full sm:flex-1">
+            <h1 className="break-words text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
               {product.name}
             </h1>
             <p className="mt-2 text-lg text-gray-600">

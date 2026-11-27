@@ -89,14 +89,9 @@ const CatalogDownload = () => {
 
   return (
     <div className="relative bg-gray-50">
-      {/* Fixed Catalog Button on the bottom-left */}
       <button
-        className="fixed right-5 md:right-0 top-[25rem] md:top-52 
-  bg-gradient-to-r from-[#EB1C24] to-[#B01018] 
-  text-white rotate-90 translate-x-20
-  rounded-full shadow-xl 
-  hover:scale-110 hover:shadow-2xl transition-all duration-300 
-  z-[1000] flex items-center gap-2 px-4 py-2"
+        type="button"
+        className="fixed right-0 top-1/2 z-[1000] flex -translate-y-1/2 items-center gap-2 rounded-l-xl bg-gradient-to-r from-[#EB1C24] to-[#B01018] px-2 py-3 text-white shadow-xl transition-shadow hover:shadow-2xl [writing-mode:vertical-rl] md:px-3"
         onClick={() => setShowForm(true)}
       >
         {/* Icon */}

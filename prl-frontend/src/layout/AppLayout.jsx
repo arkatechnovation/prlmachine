@@ -67,7 +67,7 @@ const AppLayout = () => {
         <CatalogDownload />
       </Suspense>
 
-      <main id="main-content">
+      <main id="main-content" className="min-w-0 max-w-full overflow-x-clip md:overflow-x-visible">
         <Outlet />
       </main>
       <Suspense fallback={<div className="min-h-[300px]" />}>
