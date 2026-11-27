@@ -6,7 +6,7 @@ const HERO_POSTER = "/assets/vedios/prllogovideo-poster.webp";
 // --- Desktop Data ---
 const SLIDE_DATA_DESKTOP = [
   { id: 1, type: "video", src: "/assets/vedios/prllogovideo.mp4", poster: HERO_POSTER },
-  { id: 2, type: "video", src: "/assets/vedios/parida-red-lion-video.mp4" },
+  { id: 2, type: "video", src: "/assets/vedios/parida-red-lion-video.mp4", poster: "/assets/banners/prlhomepagebanner.jpg" },
   { id: 3, type: "image", src: "/assets/banners/prlhomepagebanner.jpg" },
   { id: 4, type: "image", src: "/assets/banners/slider/homepagebanner2.jpg" },
   { id: 5, type: "image", src: "/assets/banners/PARIDA2.jpg" },
@@ -15,7 +15,7 @@ const SLIDE_DATA_DESKTOP = [
 // --- Mobile Data ---
 const SLIDE_DATA_MOBILE = [
   { id: 1, type: "video", src: "/assets/vedios/prllogovideo.mp4", poster: HERO_POSTER },
-  { id: 2, type: "video", src: "/assets/vedios/parida-red-lion-video.mp4" },
+  { id: 2, type: "video", src: "/assets/vedios/parida-red-lion-video.mp4", poster: "/assets/banners/mobile-view-banners/mobile-view-bannerprl.jpg" },
   {
     id: 3,
     type: "image",
@@ -170,7 +170,11 @@ const MobileBanner = ({ slides }) => {
                     src={isActive && videoStreamReady ? slide.src : undefined}
                     poster={slide.poster}
                     preload={isActive && videoStreamReady ? "metadata" : "none"}
-                    className="relative w-full h-full object-cover"
+                    onCanPlay={(e) => {
+                      e.currentTarget.style.opacity = "1";
+                    }}
+                    onError={nextSlide}
+                    className="relative w-full h-full object-cover opacity-0 transition-opacity duration-300"
                     muted
                     autoPlay={isActive && videoStreamReady}
                     playsInline
@@ -302,7 +306,11 @@ const DesktopBanner = ({ slides }) => {
                     src={isActive && videoStreamReady ? slide.src : undefined}
                     poster={slide.poster}
                     preload={isActive && videoStreamReady ? "metadata" : "none"}
-                    className="relative w-full h-full object-cover"
+                    onCanPlay={(e) => {
+                      e.currentTarget.style.opacity = "1";
+                    }}
+                    onError={nextSlide}
+                    className="relative w-full h-full object-cover opacity-0 transition-opacity duration-300"
                     muted
                     autoPlay={isActive && videoStreamReady}
                     playsInline
