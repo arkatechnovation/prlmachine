@@ -27,6 +27,8 @@ const SideButtons = () => {
     >
       {/* Arrow Toggle */}
       <button
+        type="button"
+        aria-label={open ? "Collapse sidebar" : "Expand sidebar"}
         onClick={() => setOpen(!open)}
         // Mobile: p-2, Desktop: p-3
         className="bg-gradient-to-r from-red-600 to-red-800 text-white p-2 md:p-3 rounded-r-lg md:rounded-r-xl shadow-lg hover:scale-105 transition-transform duration-300 relative overflow-hidden group"

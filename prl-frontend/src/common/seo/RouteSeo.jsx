@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import Seo from "./Seo";
+
+const Seo = lazy(() => import("./Seo"));
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://www.prlmachine.com").replace(/\/+$/, "");
@@ -73,11 +74,13 @@ const RouteSeo = () => {
   if (!seoData) return null;
 
   return (
-    <Seo
-      {...seoData}
-      canonicalUrl={toAbsoluteCanonicalUrl(seoData.canonicalUrl, location.pathname)}
-      canonicalPath={location.pathname}
-    />
+    <Suspense fallback={null}>
+      <Seo
+        {...seoData}
+        canonicalUrl={toAbsoluteCanonicalUrl(seoData.canonicalUrl, location.pathname)}
+        canonicalPath={location.pathname}
+      />
+    </Suspense>
   );
 };
 

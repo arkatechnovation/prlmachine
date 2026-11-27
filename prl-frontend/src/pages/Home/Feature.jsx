@@ -34,13 +34,13 @@ const FeaturesSection = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-4"
           >
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-1">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-1">
               OUR FEATURES
-            </h1>
+            </h2>
             <div className="section-subtitle">
-              <h4 className="text-xl md:text-2xl font-bold text-blue-600">
+              <h3 className="text-xl md:text-2xl font-bold text-blue-600">
                 INNOVATION | DURABILITY | EXCELLENCE
-              </h4>
+              </h3>
             </div>
           </motion.div>
 
@@ -63,6 +63,8 @@ const FeaturesSection = () => {
                     className="mx-auto h-16 w-24 object-contain"
                     src="/assets/extra-img/Precision-Cutting-bg-preview.png"
                     alt="Advanced Engineering"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">
@@ -85,6 +87,8 @@ const FeaturesSection = () => {
                     className="mx-auto h-16 w-24 object-contain"
                     src="/assets/extra-img/Smart-manufacturing-automation-removebg-preview.png"
                     alt="Manufacturing Innovation"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">
@@ -110,6 +114,8 @@ const FeaturesSection = () => {
                   className="absolute inset-0 w-full h-full object-contain animate-float"
                   src="/assets/extra-img/feature-img2.png"
                   alt="Featured"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
             </motion.div>
@@ -126,6 +132,8 @@ const FeaturesSection = () => {
                     className="mx-auto h-16 w-24 object-contain"
                     src="/assets/extra-img/Machine-testing-Photoroom.png"
                     alt="Quality Assurance"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">
@@ -148,6 +156,8 @@ const FeaturesSection = () => {
                     className="mx-auto h-16 w-24 object-contain"
                     src="/assets/extra-img/Global-Machine-Solutions-removebg-preview.png"
                     alt="Customer Support"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">
@@ -163,7 +173,7 @@ const FeaturesSection = () => {
         </div>
 
         {/* Float Animation */}
-        <style jsx>{`
+        <style>{`
           .animate-float {
             animation: float 6s ease-in-out infinite;
           }

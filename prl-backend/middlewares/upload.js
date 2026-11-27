@@ -1,6 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const { optimizeImageFile } = require("../utils/imageOptimizer");
 
 /**
  * 1. UPLOADS FOLDER SETUP
@@ -72,5 +73,23 @@ const upload = multer({
     );
   },
 });
+
+const origSingle = upload.single.bind(upload);
+upload.single = (fieldName) => {
+  const middleware = origSingle(fieldName);
+  return (req, res, next) => {
+    middleware(req, res, async (err) => {
+      if (err) return next(err);
+      if (req.file?.path) {
+        try {
+          await optimizeImageFile(req.file.path);
+        } catch (optErr) {
+          console.error("⚠️ Image optimization skipped:", optErr.message);
+        }
+      }
+      next();
+    });
+  };
+};
 
 module.exports = upload;

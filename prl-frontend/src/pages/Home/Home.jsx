@@ -1,48 +1,98 @@
-import React from "react";
-import HeroSection from "./HeroSection";
+import React, { Suspense, lazy, useEffect, useRef, useState } from "react";
 import About from "../Home/About";
-import { div } from "framer-motion/client";
-import { ImOpt } from "react-icons/im";
-import ProductShowcase from "./ProductShowcase";
-import TestimonialSlider from "./Testimonial";
-import WhyChooseUs from "./WhyChooseUs";
-// import MachineSlider from "./Sliderbanner";
-import TeamSection from "./Our-leadership";
-import ValuedClients from "./Our-Clients";
-import NewsletterSection from "./NewsLetter";
-import FeaturesSection from "./Feature";
-// import BannerSlider from "./Images-sliders";
-import VideoHeroWithSlider from "./Homepagevideo";
-
-import OurCustomers from "./TrustedSlider";
-import OurPartners from "./TrustedSlider";
-import PRL_Journey from "./Our-journey";
-import Journey from "./Jouney";
-import EnquiryForm from "../../components/EnquiryForm";
 import Landingpage from "./Landingpage";
+
+const EnquiryForm = lazy(() => import("../../components/EnquiryForm"));
+const ProductShowcase = lazy(() => import("./ProductShowcase"));
+const PRL_Journey = lazy(() => import("./Our-journey"));
+const HeroSection = lazy(() => import("./HeroSection"));
+const OurPartners = lazy(() => import("./TrustedSlider"));
+const TestimonialSlider = lazy(() => import("./Testimonial"));
+const WhyChooseUs = lazy(() => import("./WhyChooseUs"));
+const FeaturesSection = lazy(() => import("./Feature"));
+const TeamSection = lazy(() => import("./Our-leadership"));
+const ValuedClients = lazy(() => import("./Our-Clients"));
+const NewsletterSection = lazy(() => import("./NewsLetter"));
+
+/**
+ * Mounts heavy below-the-fold sections only when approaching the viewport so
+ * initial load stays fast without changing layout, looks, or data.
+ */
+const LazySection = ({ children, className = "", minHeight = 320 }) => {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (visible) return undefined;
+    const node = ref.current;
+    if (!node || typeof IntersectionObserver === "undefined") {
+      setVisible(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "120px 0px" },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [visible]);
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={visible ? undefined : { minHeight }}
+    >
+      {visible ? <Suspense fallback={null}>{children}</Suspense> : null}
+    </div>
+  );
+};
 
 const Home = () => {
   return (
     <div>
-      <EnquiryForm />
-      {/* <MachineSlider /> */}
+      <Suspense fallback={null}>
+        <EnquiryForm />
+      </Suspense>
       <Landingpage />
-
-      {/* <VideoHeroWithSlider /> */}
       <About />
-      <ProductShowcase />
-      <PRL_Journey />
-      {/* <Journey /> */}
-      {/* <BannerSlider /> */}
-      <HeroSection />
-      <OurPartners />
-      {/* <OurCustomers /> */}
-      <TestimonialSlider />
-      <WhyChooseUs />
-      <FeaturesSection />
-      <TeamSection />
-      <ValuedClients />
-      <NewsletterSection />
+      <LazySection className="hidden md:block" minHeight={480}>
+        <ProductShowcase />
+      </LazySection>
+      <LazySection minHeight={420}>
+        <PRL_Journey />
+      </LazySection>
+      <LazySection minHeight={480}>
+        <HeroSection />
+      </LazySection>
+      <LazySection minHeight={360}>
+        <OurPartners />
+      </LazySection>
+      <LazySection minHeight={420}>
+        <TestimonialSlider />
+      </LazySection>
+      <LazySection minHeight={420}>
+        <WhyChooseUs />
+      </LazySection>
+      <LazySection minHeight={480}>
+        <FeaturesSection />
+      </LazySection>
+      <LazySection minHeight={480}>
+        <TeamSection />
+      </LazySection>
+      <LazySection minHeight={420}>
+        <ValuedClients />
+      </LazySection>
+      <LazySection minHeight={320}>
+        <NewsletterSection />
+      </LazySection>
     </div>
   );
 };

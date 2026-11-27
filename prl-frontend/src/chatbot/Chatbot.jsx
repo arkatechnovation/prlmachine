@@ -444,6 +444,8 @@ const ParidaRedLionChatbot = () => {
         </div>
       ) : (
         <button
+          type="button"
+          aria-label="Open chat assistant"
           onClick={() => setIsOpen(true)}
           className="bg-red-600 text-white rounded-full p-4 shadow-lg hover:bg-red-700 transition-all flex items-center justify-center"
         >

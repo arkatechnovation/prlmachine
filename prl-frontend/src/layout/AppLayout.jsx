@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import { Outlet, ScrollRestoration, useLocation } from "react-router-dom";
-import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import GetQuoteModal from "../common/GetAquote/Getaquote";
-import ParidaRedLionChatbot from "../chatbot/Chatbot";
-import CatalogDownload from "../common/downloadcatelog/CatalogDownload";
-import SideButtons from "../common/Sidebaar/SideBar";
 import RouteSeo from "../common/seo/RouteSeo";
 import { scrollToHash } from "../utils/hashScroll";
+
+const Footer = lazy(() => import("../components/Footer"));
+const GetQuoteModal = lazy(() => import("../common/GetAquote/Getaquote"));
+const ParidaRedLionChatbot = lazy(() => import("../chatbot/Chatbot"));
+const CatalogDownload = lazy(
+  () => import("../common/downloadcatelog/CatalogDownload"),
+);
+const SideButtons = lazy(() => import("../common/Sidebaar/SideBar"));
 
 const HashScrollManager = () => {
   const location = useLocation();
@@ -53,13 +56,23 @@ const AppLayout = () => {
       <ScrollRestoration />
       <HashScrollManager />
       <Navbar onOpenQuote={handleOpenQuote} />
-      <GetQuoteModal isOpen={isQuoteModalOpen} onClose={handleCloseQuote} />
-      <SideButtons />
-      <ParidaRedLionChatbot />
-      <CatalogDownload />
-      
-      <Outlet />
-      <Footer />
+      {isQuoteModalOpen && (
+        <Suspense fallback={null}>
+          <GetQuoteModal isOpen={isQuoteModalOpen} onClose={handleCloseQuote} />
+        </Suspense>
+      )}
+      <Suspense fallback={null}>
+        <SideButtons />
+        <ParidaRedLionChatbot />
+        <CatalogDownload />
+      </Suspense>
+
+      <main id="main-content">
+        <Outlet />
+      </main>
+      <Suspense fallback={<div className="min-h-[300px]" />}>
+        <Footer />
+      </Suspense>
     </>
   );
 };

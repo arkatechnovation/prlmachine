@@ -10,12 +10,7 @@ import {
   FiPlus,
   FiMinus,
 } from "react-icons/fi";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
 import axios from "axios";
-
-import "swiper/css";
-import "swiper/css/autoplay";
 import {
   FaFacebook,
   FaTwitter,
@@ -76,7 +71,7 @@ const RedLionNavbar = ({ onOpenQuote }) => {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [loading, setLoading] = useState(true);
-  const [logo, setLogo] = useState("");
+  const [logo, setLogo] = useState("/assets/logo/prl-logo-png.png");
   const [announcements, setAnnouncements] = useState([]);
   const [socialLinks, setSocialLinks] = useState([]);
   const [contactInfo, setContactInfo] = useState({ phone: "", email: "" });
@@ -86,21 +81,35 @@ const RedLionNavbar = ({ onOpenQuote }) => {
   const API_URL = `${import.meta.env.VITE_API_BASE_URL}/navbar`;
 
   useEffect(() => {
-    console.log("This is category");
     getUpvcCategorySlugByName();
   }, []);
 
-  // 🔹 GOOGLE TAG MANAGER INJECTION
+  // 🔹 GOOGLE TAG MANAGER INJECTION (deferred until first interaction or idle)
   useEffect(() => {
-    const script = document.createElement("script");
-    script.innerHTML = `
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-PPMDF6KM');
-    `;
-    document.head.appendChild(script);
+    const events = ["pointerdown", "scroll", "keydown", "touchstart", "mousemove"];
+    const injectGtm = () => {
+      if (window.__gtmInjected) return;
+      window.__gtmInjected = true;
+      events.forEach((ev) => window.removeEventListener(ev, injectGtm));
+      const script = document.createElement("script");
+      script.innerHTML = `
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-PPMDF6KM');
+      `;
+      document.head.appendChild(script);
+    };
+
+    events.forEach((ev) =>
+      window.addEventListener(ev, injectGtm, { once: true, passive: true }),
+    );
+    const timer = window.setTimeout(injectGtm, 9500);
+    return () => {
+      window.clearTimeout(timer);
+      events.forEach((ev) => window.removeEventListener(ev, injectGtm));
+    };
   }, []);
 
   // Fallback data
@@ -340,10 +349,12 @@ const RedLionNavbar = ({ onOpenQuote }) => {
   useEffect(() => {
     const fetchNavbarData = () => {
       setLoading(true);
-      axios
-        .get(API_URL)
+      fetch(API_URL)
         .then((res) => {
-          const data = res.data;
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
+        })
+        .then((data) => {
           setLogo(data.logo || "/assets/logo/new-final-logo.png");
           setSocialLinks(
             data.socialLinks || [
@@ -602,7 +613,7 @@ const RedLionNavbar = ({ onOpenQuote }) => {
     return (
       <div
         id="announcement-bar"
-        className="bg-[#FB252D] fixed w-full z-50 text-white text-center text-xs md:text-sm py-2 px-4 lg:px-8 xl:px-12 flex items-center justify-between min-h-[36px]"
+        className="bg-[#C81018] fixed w-full z-50 text-white text-center text-xs md:text-sm py-2 px-4 lg:px-8 xl:px-12 flex items-center justify-between min-h-[36px]"
       >
         <div className="items-center hidden md:flex space-x-3 mr-0">
           {socialLinks.map((social, index) => {
@@ -613,6 +624,7 @@ const RedLionNavbar = ({ onOpenQuote }) => {
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={social.platform || "Social media"}
                 className="hover:text-yellow-300 transition-colors"
               >
                 <IconComponent />
@@ -625,7 +637,7 @@ const RedLionNavbar = ({ onOpenQuote }) => {
           to="https://online.fliphtml5.com/prlmachines/yvca/001/"
           target="_blank"
         >
-          <button className="text-sm font-medium rounded-md md:mr-9 border px-5 py-[0.5px] text-center bg-white border-yellow-500 text-red-500 transition-colors">
+          <button className="text-sm font-medium rounded-md md:mr-9 border px-5 py-[0.5px] text-center bg-white border-yellow-500 text-red-700 transition-colors">
             View Catalogue
           </button>
         </Link>
@@ -661,6 +673,10 @@ const RedLionNavbar = ({ onOpenQuote }) => {
                 <img
                   src={logo}
                   alt="Red Lion Logo"
+                  width="128"
+                  height="80"
+                  fetchPriority="high"
+                  decoding="async"
                   className="w-24 h-auto md:w-32 md:h-[80px] object-contain transition-transform duration-300 group-hover:scale-105"
                   onError={(e) => {
                     e.target.src = "/assets/logo/new-final-logo.png";
@@ -678,15 +694,16 @@ const RedLionNavbar = ({ onOpenQuote }) => {
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
               </Link>
               <div className="relative group">
-                <Link to="/products">
-                  <div className="flex items-center text-gray-700 hover:text-red-600 font-medium transition-all duration-300 cursor-pointer text-sm xl:text-base whitespace-nowrap">
-                    Products
-                    <FiChevronDown className="ml-1 transition-transform duration-300 group-hover:rotate-180" />
-                  </div>
-                  <div className="absolute -left-10 xl:-left-52 mt-2 w-80 bg-white/95 backdrop-blur-lg border border-gray-200 rounded-xl shadow-2xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
-                    {renderDropdownItems(products)}
-                  </div>
+                <Link
+                  to="/products"
+                  className="flex items-center text-gray-700 hover:text-red-600 font-medium transition-all duration-300 cursor-pointer text-sm xl:text-base whitespace-nowrap"
+                >
+                  Products
+                  <FiChevronDown className="ml-1 transition-transform duration-300 group-hover:rotate-180" />
                 </Link>
+                <div className="absolute -left-10 xl:-left-52 mt-2 w-80 bg-white/95 backdrop-blur-lg border border-gray-200 rounded-xl shadow-2xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
+                  {renderDropdownItems(products)}
+                </div>
               </div>
               <div className="relative group">
                 <div className="flex items-center text-gray-700 hover:text-red-600 font-medium transition-all duration-300 cursor-pointer text-sm xl:text-base whitespace-nowrap">
@@ -774,6 +791,8 @@ const RedLionNavbar = ({ onOpenQuote }) => {
                 Get a Quote
               </button>
               <button
+                type="button"
+                aria-label="Open product catalog"
                 onClick={() => setSidebarOpen(true)}
                 className="p-2 xl:p-3 rounded-xl hover:bg-red-50 text-gray-700 hover:text-red-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg hover:shadow-red-200/50 relative group"
                 title="Product Catalog"
@@ -782,6 +801,8 @@ const RedLionNavbar = ({ onOpenQuote }) => {
                 <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
               </button>
               <button
+                type="button"
+                aria-label="Toggle search"
                 onClick={() => setSearchOpen(!searchOpen)}
                 className="p-2 xl:p-3 rounded-xl hover:bg-red-50 text-gray-700 hover:text-red-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg hover:shadow-red-200/50 relative group"
               >
@@ -796,12 +817,16 @@ const RedLionNavbar = ({ onOpenQuote }) => {
             </div>
             <div className="lg:hidden flex items-center space-x-2 sm:space-x-4">
               <button
+                type="button"
+                aria-label="Toggle search"
                 onClick={() => setSearchOpen(!searchOpen)}
                 className="p-2 text-gray-700 hover:text-red-600 transition-all duration-300 transform hover:scale-110"
               >
                 <FiSearch className="text-xl" />
               </button>
               <button
+                type="button"
+                aria-label="Toggle navigation menu"
                 onClick={() => setMobileOpen(!mobileOpen)}
                 className="p-2 text-gray-700 hover:text-red-600 transition-all duration-300 transform hover:scale-110"
               >
@@ -1024,7 +1049,11 @@ const RedLionNavbar = ({ onOpenQuote }) => {
                 className="w-full bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 focus:border-red-600 text-gray-800 px-5 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-200 placeholder-gray-500 transition-all duration-300 focus:shadow-lg focus:shadow-red-200/50"
                 autoFocus
               />
-              <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-all duration-300">
+              <button
+                type="button"
+                aria-label="Submit search"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-all duration-300"
+              >
                 <FiSearch className="text-xl" />
               </button>
             </div>
@@ -1057,6 +1086,8 @@ const RedLionNavbar = ({ onOpenQuote }) => {
               Catalog
             </h2>
             <button
+              type="button"
+              aria-label="Close product catalog"
               onClick={() => setSidebarOpen(false)}
               className="p-2 rounded-xl hover:bg-red-50 text-gray-700 hover:text-red-600 transition-all duration-300 transform hover:scale-110 hover:rotate-90"
             >
@@ -1132,7 +1163,7 @@ const RedLionNavbar = ({ onOpenQuote }) => {
           setMobileOpen(false);
         }}
       />
-      <style jsx>{`
+      <style>{`
         @keyframes fadeIn {
           from {
             opacity: 0;

@@ -205,6 +205,7 @@ const EnquiryModal = ({ isOpen, onClose, product }) => {
 // --- Child Component: Product Card ---
 const ProductCard = ({ product, onEnquire }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const timeoutRef = useRef(null);
 
   const images =
@@ -247,7 +248,10 @@ const ProductCard = ({ product, onEnquire }) => {
   return (
     <div
       className="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 relative flex flex-col"
-      onMouseEnter={resetTimeout}
+      onMouseEnter={() => {
+        setHasInteracted(true);
+        resetTimeout();
+      }}
       onMouseLeave={() => {
         if (hasMultipleImages) {
           timeoutRef.current = setTimeout(
@@ -263,22 +267,31 @@ const ProductCard = ({ product, onEnquire }) => {
       <figure className="relative flex flex-col flex-grow">
         <div className="relative overflow-hidden h-48">
           <Link to={product.link}>
-            {images.map((image, index) => (
-              <img
-                key={index}
-                src={resolveImageUrl(image)}
-                alt={`${product.title} ${index + 1}`}
-                className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
-                  index === currentImageIndex ? "opacity-100" : "opacity-0"
-                }`}
-              />
-            ))}
+            {images.map((image, index) => {
+              if (!hasInteracted && index !== 0 && index !== currentImageIndex) {
+                return null;
+              }
+              return (
+                <img
+                  key={index}
+                  src={resolveImageUrl(image)}
+                  alt={`${product.title} ${index + 1}`}
+                  loading="lazy"
+                  decoding="async"
+                  className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
+                    index === currentImageIndex ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+              );
+            })}
             <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-10"></div>
           </Link>
 
           {hasMultipleImages && (
             <>
               <button
+                type="button"
+                aria-label="Previous product image"
                 onClick={handlePrevImage}
                 className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black bg-opacity-40 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-opacity-60"
               >
@@ -298,6 +311,8 @@ const ProductCard = ({ product, onEnquire }) => {
                 </svg>
               </button>
               <button
+                type="button"
+                aria-label="Next product image"
                 onClick={handleNextImage}
                 className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-black bg-opacity-40 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-opacity-60"
               >
@@ -373,7 +388,7 @@ const ProductShowcase = () => {
         ]);
 
         let upvcItems =
-          upvcRes.status === "fulfilled"
+          upvcRes.status === "fulfilled" && Array.isArray(upvcRes.value.data)
             ? upvcRes.value.data.map((p) => ({
                 title: p.name,
                 images: p.images,
@@ -384,7 +399,8 @@ const ProductShowcase = () => {
             : [];
 
         let aluminumItems =
-          aluminumRes.status === "fulfilled"
+          aluminumRes.status === "fulfilled" &&
+          Array.isArray(aluminumRes.value.data)
             ? aluminumRes.value.data.map((p) => ({
                 title: p.name,
                 images: p.images,

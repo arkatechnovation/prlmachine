@@ -181,12 +181,12 @@ function PRL_Journey() {
                           </span>
                         </div>
 
-                        <h3
+                        <h2
                           className="text-2xl font-bold mb-3 group-hover:translate-x-1 transition-transform duration-300"
                           style={{ color: colors.blue }}
                         >
                           {step.title}
-                        </h3>
+                        </h2>
                         <p className="text-gray-600 leading-relaxed">
                           {step.description}
                         </p>

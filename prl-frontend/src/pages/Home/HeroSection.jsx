@@ -1,8 +1,13 @@
 import React from "react";
-import { FaPlay, FaPause, FaVolumeMute, FaVolumeUp } from "react-icons/fa";
+import { FaPause, FaVolumeMute } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 const HeroSection = () => {
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    rootMargin: "300px",
+  });
   // Video data
   const heroVideos = [
     {
@@ -35,7 +40,7 @@ const HeroSection = () => {
   ];
 
   return (
-    <section className="relative overflow-hidden">
+    <section ref={ref} className="relative overflow-hidden">
       {/* Grid Container */}
       <div className="grid grid-cols-1 md:grid-cols-3 h-screen max-h-[600px]">
         {heroVideos.map((video) => (
@@ -45,13 +50,14 @@ const HeroSection = () => {
           >
             {/* Video Background */}
             <video
-              autoPlay
+              autoPlay={inView}
               loop
               muted
               playsInline
+              preload={inView ? "metadata" : "none"}
               className="absolute inset-0 w-full h-full object-cover z-0"
             >
-              <source src={video.videoUrl} type="video/mp4" />
+              {inView && <source src={video.videoUrl} type="video/mp4" />}
               Your browser does not support the video tag.
             </video>
 
@@ -90,10 +96,18 @@ const HeroSection = () => {
             <div className="absolute inset-0 z-5 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
               <div className="absolute inset-0 border-8 border-white/20"></div>
               <div className="absolute top-4 right-4 flex space-x-2">
-                <button className="p-2 bg-black/30 rounded-full backdrop-blur-sm hover:bg-white/20">
+                <button
+                  type="button"
+                  aria-label="Mute video"
+                  className="p-2 bg-black/30 rounded-full backdrop-blur-sm hover:bg-white/20"
+                >
                   <FaVolumeMute className="text-white" />
                 </button>
-                <button className="p-2 bg-black/30 rounded-full backdrop-blur-sm hover:bg-white/20">
+                <button
+                  type="button"
+                  aria-label="Pause video"
+                  className="p-2 bg-black/30 rounded-full backdrop-blur-sm hover:bg-white/20"
+                >
                   <FaPause className="text-white" />
                 </button>
               </div>

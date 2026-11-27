@@ -254,6 +254,8 @@ const OurPartners = () => {
                       <img
                         src={partner.img}
                         alt={partner.name}
+                        loading="lazy"
+                        decoding="async"
                         className="w-32 h-24 object-contain rounded-lg hover:rotate-3 transition-transform duration-300"
                         title={partner.name}
                       />
@@ -613,7 +615,7 @@ const OurPartners = () => {
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         /* ... (Your existing CSS, no changes needed) ... */
         .animate-fade-in {
           animation: fadeIn 0.8s ease-out forwards;

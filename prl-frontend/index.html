@@ -2,7 +2,16 @@
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parida Red Lion | uPVC &amp; Aluminium Window Making Machines</title>
+  <meta name="description"
+    content="Explore uPVC and aluminum window machinery, turnkey projects, and complete support services by Parida Red Lion India Pvt Ltd." />
   <meta name="google-site-verification" content="UO4U82WCbezKeqgqqUd7tcWB3ohOy7UTbjt-ueTSRpM" />
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+  <link rel="preload" as="image" href="/assets/vedios/prllogovideo-poster.webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="/assets/Aboutimg/about-for-bg.webp" fetchpriority="high" />
+  <link rel="icon" type="image/jpeg" href="/assets/logo/parida-red-new-logo.jpg" />
 
   <!-- Local Business Schema -->
   <script type="application/ld+json">
@@ -50,10 +59,7 @@
   }
   </script>
 
-  <meta charset="UTF-8" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
-  <link rel="icon" type="image/svg+xml" href="/assets/logo/parida-red-new-logo.jpg" style="width: 100%;" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta property="og:site_name" content="Parida Red Lion" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Parida Red Lion | Window Machinery Solutions" />
@@ -66,15 +72,39 @@
     content="Explore uPVC and aluminum window machinery, turnkey projects, and complete support services by Parida Red Lion." />
   <meta name="twitter:image" content="/assets/logo/parida-red-new-logo.jpg" />
 
-  <!-- FIX 2: Merged Google Ads + Analytics into one gtag block -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17740215187"></script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5P2W6WLX38"></script>
+  <!-- FIX 2: Deferred Google Ads + Analytics until first interaction or idle -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'AW-17740215187');
     gtag('config', 'G-5P2W6WLX38');
+    (function () {
+      var loaded = false;
+      var events = ['pointerdown', 'scroll', 'keydown', 'touchstart', 'mousemove'];
+      function loadThirdParty() {
+        if (loaded) return;
+        loaded = true;
+        events.forEach(function (ev) {
+          window.removeEventListener(ev, loadThirdParty);
+        });
+        var ga = document.createElement('script');
+        ga.async = true;
+        ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-5P2W6WLX38';
+        document.head.appendChild(ga);
+
+        var gt = document.createElement('script');
+        gt.async = true;
+        gt.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        document.body.appendChild(gt);
+      }
+      events.forEach(function (ev) {
+        window.addEventListener(ev, loadThirdParty, { once: true, passive: true });
+      });
+      window.addEventListener('load', function () {
+        setTimeout(loadThirdParty, 9500);
+      });
+    })();
   </script>
 
   <script type="module" src="/src/main.jsx"></script>
@@ -84,7 +114,7 @@
   <div id="root"></div>
   <div id="google_translate_element"></div>
 
-  <!-- FIX 3: Google Translate init function defined BEFORE the library script -->
+  <!-- FIX 3: Google Translate init function defined BEFORE deferred loader runs -->
   <script type="text/javascript">
     function googleTranslateElementInit() {
       new google.translate.TranslateElement(
@@ -93,9 +123,6 @@
       );
     }
   </script>
-
-  <!-- FIX 3: Library script moved to bottom of body, AFTER the callback function -->
-  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 
 </html>

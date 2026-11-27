@@ -137,6 +137,8 @@ const CompactFounderJourney = () => {
                       <img
                         src="/assets/extra-img/rajesh-parida.jpeg"
                         alt="Rajesh Kumar Parida"
+                        loading="lazy"
+                        decoding="async"
                         className="absolute inset-0 w-full h-full object-cover object-top"
                       />
 

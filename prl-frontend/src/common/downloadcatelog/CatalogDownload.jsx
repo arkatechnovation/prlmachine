@@ -255,7 +255,7 @@ const CatalogDownload = () => {
       )}
 
       {/* Animations */}
-      <style jsx>{`
+      <style>{`
         @keyframes fadeIn {
           from {
             opacity: 0;

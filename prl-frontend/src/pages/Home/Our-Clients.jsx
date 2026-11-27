@@ -170,6 +170,8 @@ const ValuedClients = () => {
           >
             {/* Navigation Buttons */}
             <button
+              type="button"
+              aria-label="Previous clients"
               onClick={prevSlide}
               className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-violet-50 shadow-lg rounded-full p-3 transition-all duration-300 hover:scale-110 group border border-violet-200"
             >
@@ -177,6 +179,8 @@ const ValuedClients = () => {
             </button>
 
             <button
+              type="button"
+              aria-label="Next clients"
               onClick={nextSlide}
               className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 bg-white hover:bg-violet-50 shadow-lg rounded-full p-3 transition-all duration-300 hover:scale-110 group border border-violet-200"
             >
@@ -220,24 +224,30 @@ const ValuedClients = () => {
             </div>
 
             {/* Slide Indicators */}
-            <div className="flex justify-center gap-2 mt-6">
+            <div className="flex justify-center gap-1 mt-6">
               {Array.from({ length: totalSlides }, (_, i) => (
                 <button
                   key={i}
+                  type="button"
+                  aria-label={`Go to client slide ${i + 1}`}
                   onClick={() => setCurrentSlide(i)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    i === currentSlide
-                      ? "bg-gradient-to-r from-violet-600 to-red-600 w-6"
-                      : "bg-violet-200 hover:bg-violet-300"
-                  }`}
-                />
+                  className="min-w-[24px] min-h-[24px] flex items-center justify-center p-1"
+                >
+                  <span
+                    className={`block h-2 rounded-full transition-all duration-300 ${
+                      i === currentSlide
+                        ? "bg-gradient-to-r from-violet-600 to-red-600 w-6"
+                        : "bg-violet-200 hover:bg-violet-300 w-2"
+                    }`}
+                  />
+                </button>
               ))}
             </div>
           </div>
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes fade-in-left {
           from {
             opacity: 0;

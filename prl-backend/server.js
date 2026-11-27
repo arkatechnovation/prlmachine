@@ -1,12 +1,17 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const compression = require("compression");
 const path = require("path");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const fs = require("fs");
 const multer = require("multer");
 const seoController = require("./controllers/seoController");
+const {
+  optimizeImageFile,
+  serveOptimizedUploads,
+} = require("./utils/imageOptimizer");
 
 // DB Connection
 const connectDB = require("./config/db");
@@ -31,6 +36,7 @@ if (!fs.existsSync(uploadDir)) {
 /**
  * 2. MIDDLEWARES & SECURITY
  */
+app.use(compression());
 app.use(cors());
 app.use(morgan("dev"));
 
@@ -42,9 +48,16 @@ app.use(
   }),
 );
 
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  ...(process.env.NODE_ENV !== "production"
+    ? ["http://localhost:5173", "http://localhost:4173"]
+    : []),
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "*",
+    origin: allowedOrigins.length ? allowedOrigins : "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
@@ -57,7 +70,11 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
  * 3. STATIC FILES SERVING
  * Isse http://yourdomain.com/uploads/filename.jpg access ho payegi
  */
-app.use("/uploads", express.static(uploadDir));
+app.use("/uploads", serveOptimizedUploads(uploadDir));
+app.use(
+  "/uploads",
+  express.static(uploadDir, { maxAge: "365d", immutable: true }),
+);
 
 /**
  * 4. MULTER STORAGE CONFIGURATION
@@ -101,11 +118,17 @@ const upload = multer({
 /**
  * 5. UPLOAD ENDPOINT
  */
-app.post("/api/upload", upload.single("image"), (req, res) => {
+app.post("/api/upload", upload.single("image"), async (req, res) => {
   if (!req.file) {
     return res
       .status(400)
       .json({ success: false, message: "No file uploaded" });
+  }
+
+  try {
+    await optimizeImageFile(req.file.path);
+  } catch (optErr) {
+    console.error("⚠️ Upload optimization skipped:", optErr.message);
   }
 
   // Return filename to save in DB and relative URL for frontend

@@ -1,67 +1,96 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import {
   createBrowserRouter,
   RouterProvider,
   Navigate,
 } from "react-router-dom";
 
-// Layouts
+// Layouts & Primary Landing Page (kept eager for fast initial render)
 import AppLayout from "../layout/AppLayout";
-import AdminLayout from "../layout/AdminLayout";
-
-// Frontend Pages
 import Home from "../pages/Home/Home";
-import Blogs from "../pages/Blogs/Blogs";
-import Contact from "../pages/Contact-Us/Contact";
-import AllProducts from "../pages/Products/AllProducts";
-import Windowmachine from "../pages/Products/UpvcWindowMachine";
-import AluminumWindowMachine from "../pages/Products/AluminumWindowMachine";
-import CaseStudiesPage from "../casestudies/Casestudies";
-import UpvcDetail from "../pages/Products/ProductDetailuPVC";
-import AluminiumDetail from "../pages/Products/ProductDetailAluminium";
-import ProductSlugPage from "../pages/Products/ProductSlugPage";
-import LegacyProductRedirect from "../pages/Products/LegacyProductRedirect";
+
+// Lazy-loaded Layouts & Frontend Pages
+const AdminLayout = lazy(() => import("../layout/AdminLayout"));
+const Blogs = lazy(() => import("../pages/Blogs/Blogs"));
+const Contact = lazy(() => import("../pages/Contact-Us/Contact"));
+const AllProducts = lazy(() => import("../pages/Products/AllProducts"));
+const Windowmachine = lazy(() => import("../pages/Products/UpvcWindowMachine"));
+const AluminumWindowMachine = lazy(
+  () => import("../pages/Products/AluminumWindowMachine"),
+);
+const CaseStudiesPage = lazy(() => import("../casestudies/Casestudies"));
+const ProductSlugPage = lazy(() => import("../pages/Products/ProductSlugPage"));
+const LegacyProductRedirect = lazy(
+  () => import("../pages/Products/LegacyProductRedirect"),
+);
 
 // Services Pages
-import Services from "../pages/services/Services";
-import MachineCustomization from "../pages/services/MachineCustomization";
-import Installation from "../pages/services/Installation";
-import Maintenance from "../pages/services/Maintenance";
-import Training from "../pages/services/Training";
-import BlogDetails from "../pages/Blogs/Blogdetails";
-import FAQ from "../pages/ourcompany/FAQ";
-import OurTeam from "../pages/ourcompany/OurTeam";
-import News from "../pages/ourcompany/News";
-import MissionVision from "../pages/ourcompany/Mission-vission";
-import AboutPage from "../pages/ourcompany/AboutPage";
-import OurCompanyPage from "../pages/ourcompany/OurCompany";
-import Blogspage from "../pages/ourcompany/OurBlogs";
+const Services = lazy(() => import("../pages/services/Services"));
+const MachineCustomization = lazy(
+  () => import("../pages/services/MachineCustomization"),
+);
+const Installation = lazy(() => import("../pages/services/Installation"));
+const Maintenance = lazy(() => import("../pages/services/Maintenance"));
+const Training = lazy(() => import("../pages/services/Training"));
+const BlogDetails = lazy(() => import("../pages/Blogs/Blogdetails"));
+const FAQ = lazy(() => import("../pages/ourcompany/FAQ"));
+const OurTeam = lazy(() => import("../pages/ourcompany/OurTeam"));
+const News = lazy(() => import("../pages/ourcompany/News"));
+const MissionVision = lazy(() => import("../pages/ourcompany/Mission-vission"));
+const AboutPage = lazy(() => import("../pages/ourcompany/AboutPage"));
+const OurCompanyPage = lazy(() => import("../pages/ourcompany/OurCompany"));
+const Blogspage = lazy(() => import("../pages/ourcompany/OurBlogs"));
 
 // 🛠️ Admin Pages
-import DashboardPage from "../admin/sidebarpages/DashboardPage";
-import Adminblog from "../admin/sidebarpages/Adminblog";
-import AdminContact from "../admin/sidebarpages/AdminContact";
-import AdminFooter from "../admin/sidebarpages/AdminFooter";
-import AdminNarbar from "../admin/sidebarpages/AdminNarbar";
-import AdminProducts from "../admin/sidebarpages/AdminProducts";
-import AdminUpvcProducts from "../admin/sidebarpages/AdminProductspages/AdminUpvcProducts";
-import AdminAluminumProducts from "../admin/sidebarpages/AdminProductspages/AdminAluminumProducts";
-import AdminSeoManager from "../admin/sidebarpages/AdminSeoManager";
-import AdminProfile from "../admin/adminnavorfootersidebar/AdminProfile";
-import AdminSettings from "../admin/adminnavorfootersidebar/AdminSettings";
+const DashboardPage = lazy(() => import("../admin/sidebarpages/DashboardPage"));
+const Adminblog = lazy(() => import("../admin/sidebarpages/Adminblog"));
+const AdminContact = lazy(() => import("../admin/sidebarpages/AdminContact"));
+const AdminFooter = lazy(() => import("../admin/sidebarpages/AdminFooter"));
+const AdminNarbar = lazy(() => import("../admin/sidebarpages/AdminNarbar"));
+const AdminProducts = lazy(() => import("../admin/sidebarpages/AdminProducts"));
+const AdminUpvcProducts = lazy(
+  () => import("../admin/sidebarpages/AdminProductspages/AdminUpvcProducts"),
+);
+const AdminAluminumProducts = lazy(
+  () => import("../admin/sidebarpages/AdminProductspages/AdminAluminumProducts"),
+);
+const AdminSeoManager = lazy(
+  () => import("../admin/sidebarpages/AdminSeoManager"),
+);
+const AdminProfile = lazy(
+  () => import("../admin/adminnavorfootersidebar/AdminProfile"),
+);
+const AdminSettings = lazy(
+  () => import("../admin/adminnavorfootersidebar/AdminSettings"),
+);
 
-// 🔑 Admin Login Page
-import AdminLogin from "../admin/AdminLogin";
-import MakinoPage from "../pages/turnkey/TurnKey";
-import TurnkeyPage from "../pages/turnkey/TurnKey";
-import TurnkeyDetailPage from "../pages/turnkey/TurnkeyDetailPage";
-import Admintestimonial from "../admin/sidebarpages/Admintestimonial";
-import PrivacyPolicy from "../components/Privacy-policy";
-import TermsAndConditions from "../components/Term-conditiom";
-import EnquiryForm from "../components/EnquiryForm";
-import MachinePage from "../pages/Products/AluminumWindowMachine";
-import ProductDetailPage from "../pages/Products/ProductDetailuPVC";
-// import Product from "../Product";
+// 🔑 Admin Login & Misc Pages
+const AdminLogin = lazy(() => import("../admin/AdminLogin"));
+const MakinoPage = lazy(() => import("../pages/turnkey/TurnKey"));
+const TurnkeyPage = lazy(() => import("../pages/turnkey/TurnKey"));
+const TurnkeyDetailPage = lazy(
+  () => import("../pages/turnkey/TurnkeyDetailPage"),
+);
+const Admintestimonial = lazy(
+  () => import("../admin/sidebarpages/Admintestimonial"),
+);
+const PrivacyPolicy = lazy(() => import("../components/Privacy-policy"));
+const TermsAndConditions = lazy(() => import("../components/Term-conditiom"));
+const EnquiryForm = lazy(() => import("../components/EnquiryForm"));
+const MachinePage = lazy(() => import("../pages/Products/AluminumWindowMachine"));
+const ProductDetailPage = lazy(
+  () => import("../pages/Products/ProductDetailuPVC"),
+);
+
+const RouteFallback = () => (
+  <div className="min-h-[40vh] flex items-center justify-center">
+    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-red-600" />
+  </div>
+);
+
+const withSuspense = (element) => (
+  <Suspense fallback={<RouteFallback />}>{element}</Suspense>
+);
 
 // ✅ Auth check function
 const isAuthenticated = () => {
@@ -83,83 +112,82 @@ const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       { index: true, element: <Home /> },
-      { path: "blogs", element: <Blogs /> },
-      { path: "products", element: <AllProducts /> },
+      { path: "blogs", element: withSuspense(<Blogs />) },
+      { path: "products", element: withSuspense(<AllProducts />) },
       {
         path: "products/uPVC-window-making-machine-price",
-        element: <Windowmachine />,
+        element: withSuspense(<Windowmachine />),
       },
       {
         path: "products/:categorySlug",
-        element: <MachinePage />,
+        element: withSuspense(<MachinePage />),
       },
       {
         path: "products/:categorySlug",
-        element: <Windowmachine />,
+        element: withSuspense(<Windowmachine />),
       },
       {
         path: "products/aluminum-window-machines",
-        element: <AluminumWindowMachine />,
+        element: withSuspense(<AluminumWindowMachine />),
       },
-
       {
         path: "products/:categorySlug/:productSlug",
-        element: <LegacyProductRedirect />,
+        element: withSuspense(<LegacyProductRedirect />),
       },
-      // {
-      //   path: "product/:productSlug",
-      //   element: <Product />,
-      // },
-      { path: "products/:productSlug", element: <ProductSlugPage /> },
-      { path: "contact-us", element: <Contact /> },
-      { path: "privacy-policy", element: <PrivacyPolicy /> },
-      { path: "terms-and-conditions", element: <TermsAndConditions /> },
-      { path: "case-studies", element: <CaseStudiesPage /> },
-      { path: "product-detail/:id", element: <ProductDetailPage /> },
-      // { path: "productdetailaluminium/:id", element: <AluminiumDetail /> },
-
-      // ✅ 🔹 UPDATED: blogs/:id ki jagah blogs/:slug use kiya hai
-      { path: "blogs/:slug", element: <BlogDetails /> },
-
-      { path: "enquiry", element: <EnquiryForm /> },
-      { 
+      {
+        path: "products/:productSlug",
+        element: withSuspense(<ProductSlugPage />),
+      },
+      { path: "contact-us", element: withSuspense(<Contact />) },
+      { path: "privacy-policy", element: withSuspense(<PrivacyPolicy />) },
+      {
+        path: "terms-and-conditions",
+        element: withSuspense(<TermsAndConditions />),
+      },
+      { path: "case-studies", element: withSuspense(<CaseStudiesPage />) },
+      { path: "product-detail/:id", element: withSuspense(<ProductDetailPage />) },
+      { path: "blogs/:slug", element: withSuspense(<BlogDetails />) },
+      { path: "enquiry", element: withSuspense(<EnquiryForm />) },
+      {
         path: "turn-key",
-        element: <TurnkeyPage />,
+        element: withSuspense(<TurnkeyPage />),
       },
-      { path: "turnkeydetailpage", element: <TurnkeyDetailPage /> },
-
+      { path: "turnkeydetailpage", element: withSuspense(<TurnkeyDetailPage />) },
       {
         path: "makinopage",
-        element: <MakinoPage />,
+        element: withSuspense(<MakinoPage />),
       },
       // 🏢 Our Company Nested Routes
       {
         path: "our-company",
-        element: <OurCompanyPage />,
+        element: withSuspense(<OurCompanyPage />),
         children: [
           { index: true, element: <Navigate to="about" replace /> },
-          { path: "about-us", element: <AboutPage /> },
-          { path: "faq", element: <FAQ /> },
-          { path: "blogs", element: <Blogspage /> },
-          { path: "our-team", element: <OurTeam /> },
-          { path: "news", element: <News /> },
-          { path: "mission-vision", element: <MissionVision /> },
+          { path: "about-us", element: withSuspense(<AboutPage />) },
+          { path: "faq", element: withSuspense(<FAQ />) },
+          { path: "blogs", element: withSuspense(<Blogspage />) },
+          { path: "our-team", element: withSuspense(<OurTeam />) },
+          { path: "news", element: withSuspense(<News />) },
+          { path: "mission-vision", element: withSuspense(<MissionVision />) },
         ],
       },
 
       // ⚙️ Services Nested Routes
       {
         path: "services",
-        element: <Services />,
+        element: withSuspense(<Services />),
         children: [
           {
             index: true,
             element: <Navigate to="machine-customization" replace />,
           },
-          { path: "machine-customization", element: <MachineCustomization /> },
-          { path: "installation", element: <Installation /> },
-          { path: "maintenance", element: <Maintenance /> },
-          { path: "training", element: <Training /> },
+          {
+            path: "machine-customization",
+            element: withSuspense(<MachineCustomization />),
+          },
+          { path: "installation", element: withSuspense(<Installation />) },
+          { path: "maintenance", element: withSuspense(<Maintenance />) },
+          { path: "training", element: withSuspense(<Training />) },
         ],
       },
     ],
@@ -168,7 +196,7 @@ const router = createBrowserRouter([
   // 🔑 Admin Login Route
   {
     path: "/admin-login",
-    element: <AdminLogin />,
+    element: withSuspense(<AdminLogin />),
   },
 
   // 🔐 Admin Protected Routes
@@ -176,23 +204,26 @@ const router = createBrowserRouter([
     path: "/admin",
     element: (
       <ProtectedRoute>
-        <AdminLayout />
+        {withSuspense(<AdminLayout />)}
       </ProtectedRoute>
     ),
     children: [
       { index: true, element: <Navigate to="dashboard" replace /> },
-      { path: "dashboard", element: <DashboardPage /> },
-      { path: "blog", element: <Adminblog /> },
-      { path: "contact", element: <AdminContact /> },
-      { path: "footer", element: <AdminFooter /> },
-      { path: "products", element: <AdminProducts /> },
-      { path: "seo", element: <AdminSeoManager /> },
-      { path: "navbar", element: <AdminNarbar /> },
-      { path: "testimonial", element: <Admintestimonial /> },
-      { path: "profile", element: <AdminProfile /> },
-      { path: "settings", element: <AdminSettings /> },
-      { path: "products/upvc", element: <AdminUpvcProducts /> },
-      { path: "products/aluminum", element: <AdminAluminumProducts /> },
+      { path: "dashboard", element: withSuspense(<DashboardPage />) },
+      { path: "blog", element: withSuspense(<Adminblog />) },
+      { path: "contact", element: withSuspense(<AdminContact />) },
+      { path: "footer", element: withSuspense(<AdminFooter />) },
+      { path: "products", element: withSuspense(<AdminProducts />) },
+      { path: "seo", element: withSuspense(<AdminSeoManager />) },
+      { path: "navbar", element: withSuspense(<AdminNarbar />) },
+      { path: "testimonial", element: withSuspense(<Admintestimonial />) },
+      { path: "profile", element: withSuspense(<AdminProfile />) },
+      { path: "settings", element: withSuspense(<AdminSettings />) },
+      { path: "products/upvc", element: withSuspense(<AdminUpvcProducts />) },
+      {
+        path: "products/aluminum",
+        element: withSuspense(<AdminAluminumProducts />),
+      },
     ],
   },
 ]);

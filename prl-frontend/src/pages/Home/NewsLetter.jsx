@@ -13,7 +13,7 @@ const NewsletterSection = () => {
         className="absolute inset-0 z-0 opacity-20 mix-blend-overlay"
         style={{
           backgroundImage:
-            "url(//factorydirectsupplyonline.com/cdn/shop/files/back-newsletter.jpg?v=1736886888)",
+            "url(https://factorydirectsupplyonline.com/cdn/shop/files/back-newsletter.jpg?v=1736886888)",
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}

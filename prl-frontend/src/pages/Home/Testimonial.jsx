@@ -155,16 +155,15 @@ const TestimonialSlider = () => {
   );
 
   return (
-    <section
-      className="py-8 lg:py-20 bg-gray-900 relative overflow-hidden"
-      style={{
-        backgroundImage:
-          "url('https://5.imimg.com/data5/SELLER/Default/2025/4/506635522/RT/QB/EE/245044699/upvc-window-manufacturing.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-      }}
-    >
+    <section className="py-8 lg:py-20 bg-gray-900 relative overflow-hidden">
+      <img
+        src="/assets/Aboutimg/about-for-bg.webp"
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      />
       <div className="absolute inset-0 bg-black/70"></div>
 
       <div className="container mx-auto px-4 sm:px-12 lg:px-20 relative z-10">
@@ -208,6 +207,8 @@ const TestimonialSlider = () => {
         >
           {/* Navigation Arrows */}
           <button
+            type="button"
+            aria-label="Previous testimonials"
             onClick={prevSlide}
             className="absolute -left-4 lg:-left-16 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-red-600 text-white p-4 rounded-full backdrop-blur-md transition-all border border-white/20 opacity-0 group-hover:opacity-100 hidden sm:block"
           >
@@ -226,6 +227,8 @@ const TestimonialSlider = () => {
             </svg>
           </button>
           <button
+            type="button"
+            aria-label="Next testimonials"
             onClick={nextSlide}
             className="absolute -right-4 lg:-right-16 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-red-600 text-white p-4 rounded-full backdrop-blur-md transition-all border border-white/20 opacity-0 group-hover:opacity-100 hidden sm:block"
           >
@@ -281,17 +284,19 @@ const TestimonialSlider = () => {
                   <img
                     src={getFullImgPath(testimonial.image)}
                     alt={testimonial.name}
+                    loading="lazy"
+                    decoding="async"
                     className="w-14 h-14 rounded-2xl object-cover mr-4 border-2 border-red-500 shadow-lg"
                     onError={(e) => {
                       e.target.src = "https://via.placeholder.com/60";
                     }}
                   />
                   <div className="min-w-0">
-                    <h4
+                    <h3
                       className={`font-bold text-lg truncate ${activeTab === "written" ? "text-gray-900" : "text-white"}`}
                     >
                       {testimonial.name}
-                    </h4>
+                    </h3>
                     <p className="text-red-600 text-xs font-bold uppercase tracking-widest">
                       {testimonial.role}
                     </p>
@@ -308,13 +313,19 @@ const TestimonialSlider = () => {
 
           {/* Dots */}
           {length > 1 && (
-            <div className="flex justify-center mt-12 space-x-3">
+            <div className="flex justify-center mt-12 space-x-2">
               {[...Array(length)].map((_, index) => (
                 <button
                   key={index}
+                  type="button"
+                  aria-label={`Go to testimonial slide ${index + 1}`}
                   onClick={() => handleSlideChange(index)}
-                  className={`h-2.5 rounded-full transition-all duration-300 ${index === current ? "bg-red-500 w-10" : "bg-white/20 w-2.5"}`}
-                />
+                  className="min-w-[24px] min-h-[24px] flex items-center justify-center p-1"
+                >
+                  <span
+                    className={`block h-2.5 rounded-full transition-all duration-300 ${index === current ? "bg-red-500 w-10" : "bg-white/20 w-2.5"}`}
+                  />
+                </button>
               ))}
             </div>
           )}

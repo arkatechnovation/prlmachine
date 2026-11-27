@@ -231,6 +231,10 @@ const Footer = () => {
               <img
                 src={footerData.logo}
                 alt="Brand Logo"
+                width="160"
+                height="64"
+                loading="lazy"
+                decoding="async"
                 className="h-16 w-auto object-contain mix-blend-multiply"
               />
             </Link>
@@ -244,6 +248,7 @@ const Footer = () => {
                   href={social.link}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={social.platform || "Social media"}
                   className="w-10 h-10 flex items-center justify-center rounded-full bg-white border border-gray-200 text-[#312674] shadow-sm transition-all duration-300 hover:bg-[#FC252E] hover:text-white hover:-translate-y-1 hover:shadow-md"
                 >
                   {renderIcon(social.icon, "text-lg")}
@@ -358,7 +363,7 @@ const Footer = () => {
           </p>
           <div className="flex items-center gap-1">
             <span>Designed & Developed by</span>
-            <Link to="https://www.arkatechnovation.com/" className="text-[#FC252E] font-medium hover:underline">
+            <Link to="https://www.arkatechnovation.com/" className="text-[#C81018] font-medium hover:underline">
               Arka Technovation Pvt Ltd 
             </Link>
           </div>
