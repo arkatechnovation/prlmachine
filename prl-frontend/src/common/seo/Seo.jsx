@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import { Helmet } from "react-helmet-async";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 const FALLBACK_SITE_URL = "https://www.prlmachine.com";
 
@@ -325,4 +325,10 @@ const Seo = ({
   );
 };
 
-export default Seo;
+const SeoWithProvider = (props) => (
+  <HelmetProvider>
+    <Seo {...props} />
+  </HelmetProvider>
+);
+
+export default SeoWithProvider;

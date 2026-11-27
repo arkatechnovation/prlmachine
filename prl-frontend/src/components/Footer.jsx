@@ -18,8 +18,7 @@ import { getUpvcCategorySlugByName } from "../utils/upvcCategories";
 import { getAluminumCategorySlugByName } from "../utils/aluminumCategories";
 import { getCanonicalProductPath } from "../utils/productRouting";
 
-const API_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 // 1. Manual Quick Links (Ab ye code se aayenge)
 const manualQuickLinks = [
@@ -158,6 +157,12 @@ const Footer = () => {
 
   useEffect(() => {
     const fetchFooterData = async () => {
+      if (!API_URL) {
+        setFooterData(getDefaultFooterData());
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await axios.get(`${API_URL}/footer`);
         const data = response.data || {};

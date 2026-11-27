@@ -55,13 +55,18 @@ const TestimonialSlider = () => {
 
   // 🔹 Fetch Data
   useEffect(() => {
+    if (!BASE_URL) {
+      setLoading(false);
+      return;
+    }
+
     const fetchData = async () => {
       try {
         const [testRes, statsRes] = await Promise.all([
           axios.get(`${BASE_URL}/testimonials`),
           axios.get(`${BASE_URL}/testimonials/data/stats`),
         ]);
-        setTestimonials(testRes.data || []);
+        setTestimonials(Array.isArray(testRes.data) ? testRes.data : []);
         const statsData = Array.isArray(statsRes.data)
           ? statsRes.data[0]
           : statsRes.data;
@@ -88,7 +93,7 @@ const TestimonialSlider = () => {
   }, []);
 
   const videoTestimonials = testimonials.filter(
-    (t) => t.video && t.video.trim() !== "",
+    (t) => typeof t?.video === "string" && t.video.trim() !== "",
   );
   const getActiveList = () =>
     activeTab === "written" ? testimonials : videoTestimonials;

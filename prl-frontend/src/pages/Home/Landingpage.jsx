@@ -161,16 +161,16 @@ const MobileBanner = ({ slides }) => {
                 <>
                   {slide.poster && (
                     <img
-                      src={slide.poster}
+                      src={index === 0 || isActive || videoStreamReady ? slide.poster : undefined}
                       alt="PRL Window Machinery Banner"
-                      fetchPriority="high"
+                      fetchPriority={index === 0 ? "high" : "auto"}
                       className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                     />
                   )}
                   <video
                     ref={(el) => (videoRefs.current[index] = el)}
                     src={isActive && videoStreamReady ? slide.src : undefined}
-                    poster={slide.poster}
+                    poster={isActive && videoStreamReady ? slide.poster : undefined}
                     preload={isActive && videoStreamReady ? "metadata" : "none"}
                     onCanPlay={(e) => {
                       e.currentTarget.style.opacity = "1";
@@ -297,16 +297,16 @@ const DesktopBanner = ({ slides }) => {
                 <>
                   {slide.poster && (
                     <img
-                      src={slide.poster}
+                      src={index === 0 || isActive || videoStreamReady ? slide.poster : undefined}
                       alt="PRL Window Machinery Banner"
-                      fetchPriority="high"
+                      fetchPriority={index === 0 ? "high" : "auto"}
                       className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                     />
                   )}
                   <video
                     ref={(el) => (videoRefs.current[index] = el)}
                     src={isActive && videoStreamReady ? slide.src : undefined}
-                    poster={slide.poster}
+                    poster={isActive && videoStreamReady ? slide.poster : undefined}
                     preload={isActive && videoStreamReady ? "metadata" : "none"}
                     onCanPlay={(e) => {
                       e.currentTarget.style.opacity = "1";

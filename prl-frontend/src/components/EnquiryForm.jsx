@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { CheckCircle, MessageCircle } from "lucide-react"; // WhatsApp icon ke liye MessageCircle add kiya
 import RecaptchaField from "./RecaptchaField";
 
-const EnquiryForm = () => {
+const EnquiryForm = ({ openAt }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -20,9 +20,9 @@ const EnquiryForm = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsOpen(true);
-    }, 7000);
+    }, openAt === undefined ? 7000 : Math.max(0, openAt - performance.now()));
     return () => clearTimeout(timer);
-  }, []);
+  }, [openAt]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

@@ -29,6 +29,11 @@ const RouteSeo = () => {
     const currentPath = location.pathname || "/";
 
     const loadSeo = async () => {
+      if (!API_BASE) {
+        setSeoData(buildFallbackSeoPayload(currentPath));
+        return;
+      }
+
       try {
         const response = await fetch(
           `${API_BASE}/seo/meta?path=${encodeURIComponent(currentPath)}`,

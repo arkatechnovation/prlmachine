@@ -1,17 +1,15 @@
 import React, { Suspense, lazy, useEffect, useState } from "react";
 import { Outlet, ScrollRestoration, useLocation } from "react-router-dom";
+import LazySection from "../components/LazySection";
 import Navbar from "../components/Navbar";
 import RouteSeo from "../common/seo/RouteSeo";
 import { scrollToHash } from "../utils/hashScroll";
+import ParidaRedLionChatbot from "../chatbot/Chatbot";
+import CatalogDownload from "../common/downloadcatelog/CatalogDownload";
+import SideButtons from "../common/Sidebaar/SideBar";
 
 const Footer = lazy(() => import("../components/Footer"));
 const GetQuoteModal = lazy(() => import("../common/GetAquote/Getaquote"));
-const ParidaRedLionChatbot = lazy(() => import("../chatbot/Chatbot"));
-const CatalogDownload = lazy(
-  () => import("../common/downloadcatelog/CatalogDownload"),
-);
-const SideButtons = lazy(() => import("../common/Sidebaar/SideBar"));
-
 const HashScrollManager = () => {
   const location = useLocation();
 
@@ -61,18 +59,16 @@ const AppLayout = () => {
           <GetQuoteModal isOpen={isQuoteModalOpen} onClose={handleCloseQuote} />
         </Suspense>
       )}
-      <Suspense fallback={null}>
-        <SideButtons />
-        <ParidaRedLionChatbot />
-        <CatalogDownload />
-      </Suspense>
+      <SideButtons />
+      <ParidaRedLionChatbot />
+      <CatalogDownload />
 
       <main id="main-content" className="min-w-0 max-w-full overflow-x-clip md:overflow-x-visible">
         <Outlet />
       </main>
-      <Suspense fallback={<div className="min-h-[300px]" />}>
+      <LazySection minHeight={300}>
         <Footer />
-      </Suspense>
+      </LazySection>
     </>
   );
 };

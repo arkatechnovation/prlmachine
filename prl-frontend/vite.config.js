@@ -24,20 +24,13 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     build: {
-      modulePreload: {
-        resolveDependencies: (_filename, deps) =>
-          deps.filter(
-            (dep) =>
-              !dep.includes('vendor-motion') && !dep.includes('vendor-swiper'),
-          ),
-      },
       rollupOptions: {
         output: {
-          manualChunks: {
-            'vendor-react': ['react', 'react-dom', 'react-router', 'react-router-dom'],
-            'vendor-motion': ['framer-motion'],
-            'vendor-swiper': ['swiper'],
-            'vendor-icons': ['lucide-react', 'react-icons'],
+          onlyExplicitManualChunks: true,
+          manualChunks(id) {
+            if (/\/node_modules\/(framer-motion|motion-dom|motion-utils)\//.test(id)) {
+              return 'vendor-motion'
+            }
           },
         },
       },

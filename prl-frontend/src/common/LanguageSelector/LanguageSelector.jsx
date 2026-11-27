@@ -1,65 +1,32 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-  US, FR, DE, ES, IN, CN, JP, RU, IT, BR, SA, KR, TR, IR, PK, BD,
-  CA, MX, ZA, NG, AR, CL, CO, EG, ID, TH, VN, IL, PL, NL, SE, NO,
-  FI, DK, GR, PT, BE, CH, AT, CZ, HU, RO, UA, SK, HR, RS, BG
-} from "country-flag-icons/react/3x2"; // ✅ Flags
+import englishFlagSvg from "country-flag-icons/string/3x2/US";
 
-// ✅ Supported Languages
-const countries = [
-  { code: "US", name: "English", Flag: US, langCode: "en" },
-  { code: "FR", name: "Français", Flag: FR, langCode: "fr" },
-  { code: "DE", name: "Deutsch", Flag: DE, langCode: "de" },
-  { code: "ES", name: "Español", Flag: ES, langCode: "es" },
-  { code: "IN", name: "हिन्दी", Flag: IN, langCode: "hi" },
-  { code: "CN", name: "中文 (Chinese)", Flag: CN, langCode: "zh-CN" },
-  { code: "JP", name: "日本語 (Japanese)", Flag: JP, langCode: "ja" },
-  { code: "RU", name: "Русский (Russian)", Flag: RU, langCode: "ru" },
-  { code: "IT", name: "Italiano", Flag: IT, langCode: "it" },
-  { code: "BR", name: "Português (Brasil)", Flag: BR, langCode: "pt" },
-  { code: "SA", name: "العربية", Flag: SA, langCode: "ar" },
-  { code: "KR", name: "한국어", Flag: KR, langCode: "ko" },
-  { code: "TR", name: "Türkçe", Flag: TR, langCode: "tr" },
-  { code: "IR", name: "فارسی", Flag: IR, langCode: "fa" },
-  { code: "PK", name: "اردو", Flag: PK, langCode: "ur" },
-  { code: "BD", name: "বাংলা", Flag: BD, langCode: "bn" },
-  { code: "CA", name: "Français (Canada)", Flag: CA, langCode: "fr" },
-  { code: "MX", name: "Español (México)", Flag: MX, langCode: "es" },
-  { code: "ZA", name: "Afrikaans", Flag: ZA, langCode: "af" },
-  { code: "NG", name: "Yorùbá", Flag: NG, langCode: "yo" },
-  { code: "AR", name: "Español (Argentina)", Flag: AR, langCode: "es" },
-  { code: "CL", name: "Español (Chile)", Flag: CL, langCode: "es" },
-  { code: "CO", name: "Español (Colombia)", Flag: CO, langCode: "es" },
-  { code: "EG", name: "العربية (Egypt)", Flag: EG, langCode: "ar" },
-  { code: "ID", name: "Bahasa Indonesia", Flag: ID, langCode: "id" },
-  { code: "TH", name: "ไทย", Flag: TH, langCode: "th" },
-  { code: "VN", name: "Tiếng Việt", Flag: VN, langCode: "vi" },
-  { code: "IL", name: "עברית", Flag: IL, langCode: "iw" },
-  { code: "PL", name: "Polski", Flag: PL, langCode: "pl" },
-  { code: "NL", name: "Nederlands", Flag: NL, langCode: "nl" },
-  { code: "SE", name: "Svenska", Flag: SE, langCode: "sv" },
-  { code: "NO", name: "Norsk", Flag: NO, langCode: "no" },
-  { code: "FI", name: "Suomi", Flag: FI, langCode: "fi" },
-  { code: "DK", name: "Dansk", Flag: DK, langCode: "da" },
-  { code: "GR", name: "Ελληνικά", Flag: GR, langCode: "el" },
-  { code: "PT", name: "Português", Flag: PT, langCode: "pt" },
-  { code: "BE", name: "Nederlands (Belgium)", Flag: BE, langCode: "nl" },
-  { code: "CH", name: "Deutsch (Swiss)", Flag: CH, langCode: "de" },
-  { code: "AT", name: "Deutsch (Austria)", Flag: AT, langCode: "de" },
-  { code: "CZ", name: "Čeština", Flag: CZ, langCode: "cs" },
-  { code: "HU", name: "Magyar", Flag: HU, langCode: "hu" },
-  { code: "RO", name: "Română", Flag: RO, langCode: "ro" },
-  { code: "UA", name: "Українська", Flag: UA, langCode: "uk" },
-  { code: "SK", name: "Slovenčina", Flag: SK, langCode: "sk" },
-  { code: "HR", name: "Hrvatski", Flag: HR, langCode: "hr" },
-  { code: "RS", name: "Српски", Flag: RS, langCode: "sr" },
-  { code: "BG", name: "Български", Flag: BG, langCode: "bg" },
-];
+const englishFlagUrl = `data:image/svg+xml,${encodeURIComponent(englishFlagSvg)}`;
+const EnglishFlag = ({ className }) => (
+  <img src={englishFlagUrl} alt="" className={className} />
+);
+const english = { code: "US", name: "English", Flag: EnglishFlag, langCode: "en" };
+
+let languageOptionsRequest;
+const loadLanguageOptions = () => {
+  languageOptionsRequest ??= import("./languageOptions")
+    .then(({ default: options }) => [english, ...options])
+    .catch((error) => {
+      languageOptionsRequest = undefined;
+      throw error;
+    });
+  return languageOptionsRequest;
+};
 
 const LanguageSelector = () => {
-  const [selected, setSelected] = useState(countries[0]);
+  const [selected, setSelected] = useState(english);
+  const [countries, setCountries] = useState([english]);
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  const prepareOptions = () => {
+    loadLanguageOptions().then(setCountries).catch(() => {});
+  };
 
   // ✅ Load Google Translate script
   useEffect(() => {
@@ -120,7 +87,12 @@ const LanguageSelector = () => {
 
       {/* Main Button */}
       <button
-        onClick={() => setOpen(!open)}
+        onFocus={prepareOptions}
+        onPointerEnter={prepareOptions}
+        onClick={() => {
+          if (!open) prepareOptions();
+          setOpen(!open);
+        }}
         className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md shadow"
       >
         <selected.Flag className="w-6 h-4" />

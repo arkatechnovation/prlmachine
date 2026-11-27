@@ -10,7 +10,6 @@ import {
   FiPlus,
   FiMinus,
 } from "react-icons/fi";
-import axios from "axios";
 import {
   FaFacebook,
   FaTwitter,
@@ -63,22 +62,49 @@ const iconMap = {
   FaYoutube,
 };
 
+const apiBase = import.meta.env.VITE_API_BASE_URL;
+const fallbackLogo = "/assets/logo/new-final-logo.png";
+const fallbackContactInfo = { phone: "+91 7065500903", email: "prlinquiry@gmail.com" };
+const fallbackSocialLinks = [
+  {
+    platform: "Facebook",
+    icon: "FaFacebook",
+    url: "https://www.facebook.com/profile.php?id=61558994608251",
+  },
+  {
+    platform: "WhatsApp",
+    icon: "FaWhatsapp",
+    url: "https://www.youtube.com/@PRLuPVCMACHINE",
+  },
+  {
+    platform: "Instagram",
+    icon: "FaInstagram",
+    url: "https://www.instagram.com/parida_red_lion/",
+  },
+  {
+    platform: "LinkedIn",
+    icon: "FaLinkedin",
+    url: "https://linkedin.com/company/redlionmachinery",
+  },
+];
+
 const RedLionNavbar = ({ onOpenQuote }) => {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [hasOpenedMobileMenu, setHasOpenedMobileMenu] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [hasOpenedSidebar, setHasOpenedSidebar] = useState(false);
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [loading, setLoading] = useState(true);
-  const [logo, setLogo] = useState("/assets/logo/prl-logo-png.png");
+  const [loading, setLoading] = useState(Boolean(apiBase));
+  const [logo, setLogo] = useState(apiBase ? "/assets/logo/prl-logo-png.png" : fallbackLogo);
   const [announcements, setAnnouncements] = useState([]);
-  const [socialLinks, setSocialLinks] = useState([]);
-  const [contactInfo, setContactInfo] = useState({ phone: "", email: "" });
+  const [socialLinks, setSocialLinks] = useState(apiBase ? [] : fallbackSocialLinks);
+  const [contactInfo, setContactInfo] = useState(apiBase ? { phone: "", email: "" } : fallbackContactInfo);
   const [apiProducts, setApiProducts] = useState([]);
   const [apiServices, setApiServices] = useState([]);
   const [apiCompanyItems, setApiCompanyItems] = useState([]);
-  const API_URL = `${import.meta.env.VITE_API_BASE_URL}/navbar`;
 
   useEffect(() => {
     getUpvcCategorySlugByName();
@@ -347,9 +373,18 @@ const RedLionNavbar = ({ onOpenQuote }) => {
   };
 
   useEffect(() => {
+    const applyFallbackNavbar = () => {
+      setLogo(fallbackLogo);
+      setSocialLinks(fallbackSocialLinks);
+      setContactInfo(fallbackContactInfo);
+      setLoading(false);
+    };
+
     const fetchNavbarData = () => {
+      if (!apiBase) return;
       setLoading(true);
-      fetch(API_URL)
+
+      fetch(`${apiBase}/navbar`)
         .then((res) => {
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
           return res.json();
@@ -394,39 +429,9 @@ const RedLionNavbar = ({ onOpenQuote }) => {
             setApiCompanyItems(mapIconsToData(data.companyItems));
           setLoading(false);
         })
-        .catch((err) => {
-          console.error("Error fetching navbar, using fallback data:", err);
-          setLogo("/assets/logo/new-final-logo.png");
-          setSocialLinks([
-            {
-              platform: "Facebook",
-              icon: "FaFacebook",
-              url: "https://www.facebook.com/profile.php?id=61558994608251",
-            },
-            {
-              platform: "WhatsApp",
-              icon: "FaWhatsapp",
-              url: "https://www.youtube.com/@PRLuPVCMACHINE",
-            },
-            {
-              platform: "Instagram",
-              icon: "FaInstagram",
-              url: "https://www.instagram.com/parida_red_lion/",
-            },
-            {
-              platform: "LinkedIn",
-              icon: "FaLinkedin",
-              url: "https://linkedin.com/company/redlionmachinery",
-            },
-          ]);
-          setContactInfo({
-            phone: "+91 7065500903",
-            email: "prlinquiry@gmail.com",
-          });
-          setApiProducts(mapIconsToData(fallbackProducts));
-          setApiServices(mapIconsToData(fallbackServices));
-          setApiCompanyItems(mapIconsToData(fallbackCompanyItems));
-          setLoading(false);
+        .catch((error) => {
+          console.error("Error fetching navbar, using fallback data:", error);
+          applyFallbackNavbar();
         });
     };
 
@@ -664,7 +669,7 @@ const RedLionNavbar = ({ onOpenQuote }) => {
       {renderAnnouncementBar()}
       <nav
         id="main-navbar"
-        className="bg-white/95 bg-[url('https://static.vecteezy.com/system/resources/thumbnails/007/100/608/small/abstract-geometric-white-and-gray-on-light-silver-gradient-background-modern-banner-design-illustration-free-vector.jpg')] bg-cover bg-center backdrop-blur-md border-b border-gray-200 sticky top-9 z-50 shadow-lg transition-all duration-300 hover:shadow-xl"
+        className="bg-white/95 bg-[url('/assets/banners/navbar-background.jpg')] bg-cover bg-center backdrop-blur-md border-b border-gray-200 sticky top-9 z-50 shadow-lg transition-all duration-300 hover:shadow-xl"
       >
         <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-4 xl:px-12 2xl:px-16">
           <div className="flex justify-between items-center">
@@ -673,8 +678,8 @@ const RedLionNavbar = ({ onOpenQuote }) => {
                 <img
                   src={logo}
                   alt="Red Lion Logo"
-                  width="128"
-                  height="80"
+                  width="400"
+                  height="326"
                   fetchPriority="high"
                   decoding="async"
                   className="w-24 h-auto md:w-32 md:h-[80px] object-contain transition-transform duration-300 group-hover:scale-105"
@@ -702,7 +707,7 @@ const RedLionNavbar = ({ onOpenQuote }) => {
                   <FiChevronDown className="ml-1 transition-transform duration-300 group-hover:rotate-180" />
                 </Link>
                 <div className="absolute -left-10 xl:-left-52 mt-2 w-80 bg-white/95 backdrop-blur-lg border border-gray-200 rounded-xl shadow-2xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
-                  {renderDropdownItems(products)}
+                  {windowWidth >= 1024 && renderDropdownItems(products)}
                 </div>
               </div>
               <div className="relative group">
@@ -711,7 +716,7 @@ const RedLionNavbar = ({ onOpenQuote }) => {
                   <FiChevronDown className="ml-1 transition-transform duration-300 group-hover:rotate-180" />
                 </div>
                 <div className="absolute left-0 mt-2 w-72 bg-white/95 backdrop-blur-lg border border-gray-200 rounded-xl shadow-2xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
-                  {services.map((service, index) => (
+                  {windowWidth >= 1024 && services.map((service, index) => (
                     <Link
                       key={index}
                       to={service.link}
@@ -741,7 +746,7 @@ const RedLionNavbar = ({ onOpenQuote }) => {
                   </div>
                 </div>
                 <div className="absolute left-0 mt-2 w-72 bg-white/95 backdrop-blur-lg border border-gray-200 rounded-xl shadow-2xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
-                  {companyItems.map((item, index) => (
+                  {windowWidth >= 1024 && companyItems.map((item, index) => (
                     <Link
                       key={index}
                       to={item.link}
@@ -793,7 +798,10 @@ const RedLionNavbar = ({ onOpenQuote }) => {
               <button
                 type="button"
                 aria-label="Open product catalog"
-                onClick={() => setSidebarOpen(true)}
+                onClick={() => {
+                  setHasOpenedSidebar(true);
+                  setSidebarOpen(true);
+                }}
                 className="p-2 xl:p-3 rounded-xl hover:bg-red-50 text-gray-700 hover:text-red-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg hover:shadow-red-200/50 relative group"
                 title="Product Catalog"
               >
@@ -827,7 +835,10 @@ const RedLionNavbar = ({ onOpenQuote }) => {
               <button
                 type="button"
                 aria-label="Toggle navigation menu"
-                onClick={() => setMobileOpen(!mobileOpen)}
+                onClick={() => {
+                  setHasOpenedMobileMenu(true);
+                  setMobileOpen(!mobileOpen);
+                }}
                 className="p-2 text-gray-700 hover:text-red-600 transition-all duration-300 transform hover:scale-110"
               >
                 <div className="relative">
@@ -847,7 +858,7 @@ const RedLionNavbar = ({ onOpenQuote }) => {
           }`}
         >
           {/* Mobile view fix: flex-center aur pl-36 hata diya taaki layout sahi rahe */}
-          <div className="px-6 py-4 space-y-2">
+          {hasOpenedMobileMenu && <div className="px-6 py-4 space-y-2">
             <Link
               to="/"
               className="block py-3 px-3 text-gray-700 hover:text-red-600 font-medium rounded-lg hover:bg-red-50 transition-all duration-300 transform hover:translate-x-2"
@@ -1034,7 +1045,7 @@ const RedLionNavbar = ({ onOpenQuote }) => {
             >
               Get a Quote
             </button>
-          </div>
+          </div>}
         </div>
         <div
           className={`absolute top-full left-0 right-0 bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-2xl z-40 overflow-hidden transition-all duration-500 ${
@@ -1079,7 +1090,7 @@ const RedLionNavbar = ({ onOpenQuote }) => {
           sidebarOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="p-6">
+        {hasOpenedSidebar && <div className="p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-gray-800">
               <span className="text-red-600 animate-pulse">Product</span>{" "}
@@ -1150,7 +1161,7 @@ const RedLionNavbar = ({ onOpenQuote }) => {
               </div>
             ))}
           </div>
-        </div>
+        </div>}
       </div>
       <div
         className={`fixed inset-0 bg-black/30 backdrop-blur-sm z-40 transition-all duration-500 ${
